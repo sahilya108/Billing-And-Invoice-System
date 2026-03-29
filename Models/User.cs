@@ -15,6 +15,6 @@ namespace BillingAndInvoiceSystem.Models
         [Required]
         public string Password { get; set; }
 
-        public string Role { get; set; }  // Admin or Staff
+        public string Role { get; set; } 
     }
 }
