@@ -2,6 +2,12 @@
 
 <h2>Login</h2>
 
+@if (ViewBag.Error != null)
+{
+    <p style="color:red">@ViewBag.Error</p>
+}
+
+
 <form asp-action="Login" method="post">
     <div>
         <label>Email</label>
@@ -16,3 +22,5 @@
     <br />
     <button type="submit">Login</button>
 </form>
+
+

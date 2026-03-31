@@ -1,4 +1,5 @@
-﻿using BillingAndInvoiceSystem.Models;
+﻿using System.Linq;
+using BillingAndInvoiceSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingAndInvoiceSystem.Controllers
@@ -37,6 +38,29 @@ namespace BillingAndInvoiceSystem.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        // Login Authontication
+        [HttpPost]
+        public IActionResult Login(User user)
+        {
+            var existingUser = _context.Users
+                .FirstOrDefault(u => u.Email == user.Email);
+
+            if (existingUser == null)
+            {
+                ViewBag.Error = "Email not found";
+                return View(user);
+            }
+
+            if (existingUser.Password != user.Password)
+            {
+                ViewBag.Error = "Incorrect password";
+                return View(user);
+            }
+
+            // Success
+            return RedirectToAction("Index", "Home");
         }
     }
 }
