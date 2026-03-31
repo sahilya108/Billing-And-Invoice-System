@@ -15,6 +15,13 @@ namespace BillingAndInvoiceSystem.Controllers
 
         public IActionResult Index()
         {
+            var user = HttpContext.Session.GetString("UserEmail");
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
             return View();
         }
 

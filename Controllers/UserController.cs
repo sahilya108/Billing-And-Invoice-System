@@ -44,6 +44,11 @@ namespace BillingAndInvoiceSystem.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
+            if (user == null)
+            {
+                return View();
+            }
+
             var existingUser = _context.Users
                 .FirstOrDefault(u => u.Email == user.Email);
 
@@ -59,7 +64,8 @@ namespace BillingAndInvoiceSystem.Controllers
                 return View(user);
             }
 
-            // Success
+            // Success (no need to check again)
+            HttpContext.Session.SetString("UserEmail", existingUser.Email);
             return RedirectToAction("Index", "Home");
         }
     }
