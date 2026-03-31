@@ -1,0 +1,18 @@
+﻿@model BillingAndInvoiceSystem.Models.User
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div>
+        <label>Password</label>
+        <input asp-for="Password" type="password" class="form-control" />
+    </div>
+
+    <br />
+    <button type="submit">Login</button>
+</form>
