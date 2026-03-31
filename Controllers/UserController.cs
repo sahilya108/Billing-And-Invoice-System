@@ -68,5 +68,12 @@ namespace BillingAndInvoiceSystem.Controllers
             HttpContext.Session.SetString("UserEmail", existingUser.Email);
             return RedirectToAction("Index", "Home");
         }
+
+        // Logout 
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
     }
 }
