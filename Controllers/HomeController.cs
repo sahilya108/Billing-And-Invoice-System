@@ -17,7 +17,7 @@ namespace BillingAndInvoiceSystem.Controllers
         {
             var user = HttpContext.Session.GetString("UserEmail");
 
-            if (user == null)
+            if (string.IsNullOrEmpty(user))
             {
                 return RedirectToAction("Login", "User");
             }

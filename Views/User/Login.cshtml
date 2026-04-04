@@ -1,26 +1,78 @@
 ﻿@model BillingAndInvoiceSystem.Models.User
 
-<h2>Login</h2>
+<style>
+    body {
+        background: linear-gradient(135deg, #1a1a1a, #3a0ca3);
+        color: white;
+    }
 
-@if (ViewBag.Error != null)
-{
-    <p style="color:red">@ViewBag.Error</p>
-}
+    .login-container {
+        width: 350px;
+        margin: 80px auto;
+        padding: 30px;
+        background: #222;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+    }
 
+    h2 {
+        text-align: center;
+        color: #ffd60a;
+    }
 
-<form asp-action="Login" method="post">
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: none;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 10px;
+        background: #ffd60a;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+        .btn-login:hover {
+            background: #ffea00;
+        }
+
+    .link {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+        .link a {
+            color: #b5179e;
+            text-decoration: none;
+        }
+</style>
+
+<div class="login-container">
+    <h2>Login</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <p style="color:red">@ViewBag.Error</p>
+    }
+
+    <form asp-action="Login" method="post">
+        <input asp-for="Email" placeholder="Email" class="form-control" />
+        <input asp-for="Password" type="password" placeholder="Password" class="form-control" />
+
+        <button type="submit" class="btn-login">Login</button>
+    </form>
+
+    <div class="link">
+        <p>
+            Don't have an account?
+            <a href="/User/Register">Register</a>
+        </p>
     </div>
-
-    <div>
-        <label>Password</label>
-        <input asp-for="Password" type="password" class="form-control" />
-    </div>
-
-    <br />
-    <button type="submit">Login</button>
-</form>
+</div>
 
 

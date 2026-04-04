@@ -1,31 +1,60 @@
 ﻿@model BillingAndInvoiceSystem.Models.User
 
-<h2>User Registration</h2>
+<style>
+    body {
+        background: linear-gradient(135deg, #1a1a1a, #7209b7);
+        color: white;
+    }
 
-<form asp-action="Register" method="post">
-    <div>
-        <label>Name</label>
-        <input asp-for="Name" class="form-control" />
-    </div>
+    .register-container {
+        width: 400px;
+        margin: 60px auto;
+        padding: 30px;
+        background: #222;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+    }
 
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
-    </div>
+    h2 {
+        text-align: center;
+        color: #ffd60a;
+    }
 
-    <div>
-        <label>Password</label>
-        <input asp-for="Password" type="password" class="form-control" />
-    </div>
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: none;
+    }
 
-    <div>
-        <label>Role</label>
+    .btn-register {
+        width: 100%;
+        padding: 10px;
+        background: #ffd60a;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+        .btn-register:hover {
+            background: #ffea00;
+        }
+</style>
+
+<div class="register-container">
+    <h2>User Registration</h2>
+
+    <form asp-action="Register" method="post">
+        <input asp-for="Name" placeholder="Name" class="form-control" />
+        <input asp-for="Email" placeholder="Email" class="form-control" />
+        <input asp-for="Password" type="password" placeholder="Password" class="form-control" />
+
         <select asp-for="Role" class="form-control">
             <option value="Admin">Admin</option>
             <option value="Staff">Staff</option>
         </select>
-    </div>
 
-    <br />
-    <button type="submit">Register</button>
-</form>
+        <button type="submit" class="btn-register">Register</button>
+    </form>
+</div>

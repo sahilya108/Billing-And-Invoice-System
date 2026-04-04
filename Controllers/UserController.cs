@@ -66,6 +66,7 @@ namespace BillingAndInvoiceSystem.Controllers
 
             // Success (no need to check again)
             HttpContext.Session.SetString("UserEmail", existingUser.Email);
+            HttpContext.Session.SetString("UserRole",existingUser.Role);
             return RedirectToAction("Index", "Home");
         }
 
