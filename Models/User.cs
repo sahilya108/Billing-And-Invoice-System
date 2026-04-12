@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// this is the User model.
+using System.ComponentModel.DataAnnotations;
 
 namespace BillingAndInvoiceSystem.Models
 {
