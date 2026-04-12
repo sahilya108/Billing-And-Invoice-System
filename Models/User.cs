@@ -1,4 +1,4 @@
-﻿// this is the User model.
+﻿// Trial for pull request
 using System.ComponentModel.DataAnnotations;
 
 namespace BillingAndInvoiceSystem.Models
