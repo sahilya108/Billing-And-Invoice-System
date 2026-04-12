@@ -1,0 +1,26 @@
+@model IEnumerable<BillingAndInvoiceSystem.Models.Product>
+
+<h2>Product List</h2>
+
+<a asp-action="Create" class="btn btn-primary">Add Product</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Stock</td>
+            </tr>
+        }
+    </tbody>
+</table>
