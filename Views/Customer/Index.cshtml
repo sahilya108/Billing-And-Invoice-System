@@ -1,0 +1,32 @@
+@model IEnumerable<BillingAndInvoiceSystem.Models.Customer>
+
+<h2>Customer List</h2>
+
+<!--  Search -->
+<form asp-action="Search" method="get" class="mb-3">
+    <input type="text" name="searchTerm" placeholder="Search by name or phone" class="form-control" />
+    <br />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<!--  Add Button -->
+<a asp-action="Create" class="btn btn-success">Add Customer</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Phone</td>
+            </tr>
+        }
+    </tbody>
+</table>
