@@ -1,0 +1,25 @@
+@model BillingAndInvoiceSystem.Models.Product
+
+<h2>Edit Product</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div>
+        <label>Price</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <div>
+        <label>Stock</label>
+        <input asp-for="Stock" class="form-control" />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Update</button>
+</form>
