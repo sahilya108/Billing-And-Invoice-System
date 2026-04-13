@@ -41,12 +41,19 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-warning" asp-controller="Product" asp-action="Index">Products</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-info" asp-controller="Customer" asp-action="Index">Customers</a>
+                                </li>
+
                             }
 
                             if (role == "Staff")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-info" asp-controller="Billing" asp-action="Index">Billing</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-info" asp-controller="Customer" asp-action="Index">Customers</a>
                                 </li>
                             }
 

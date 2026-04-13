@@ -1,5 +1,12 @@
 @model IEnumerable<BillingAndInvoiceSystem.Models.Customer>
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
 <h2>Customer List</h2>
 
 <!--  Search -->
@@ -12,6 +19,15 @@
 <!--  Add Button -->
 <a asp-action="Create" class="btn btn-success">Add Customer</a>
 
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning mt-2">
+        @ViewBag.Message
+    </div>
+}
+
+@if (Model.Any())
+{
 <table class="table table-bordered mt-3">
     <thead>
         <tr>
@@ -30,3 +46,5 @@
         }
     </tbody>
 </table>
+}
+
