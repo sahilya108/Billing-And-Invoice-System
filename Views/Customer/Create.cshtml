@@ -1,0 +1,18 @@
+@model BillingAndInvoiceSystem.Models.Customer
+
+<h2>Add Customer</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div>
+        <label>Phone</label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
