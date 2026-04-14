@@ -4,17 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BillingAndInvoiceSystem</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BillingAndInvoiceSystem.styles.css" asp-append-version="true" />
-    
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
 
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">BillingAndInvoiceSystem</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    BillingAndInvoiceSystem
+                </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                     <span class="navbar-toggler-icon"></span>
@@ -38,15 +40,31 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">Admin Panel</a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link text-warning" asp-controller="Product" asp-action="Index">Products</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-info" asp-controller="Customer" asp-action="Index">Customers</a>
+                                </li>
+
                             }
 
                             if (role == "Staff")
                             {
                                 <li class="nav-item">
+                                    <a class="nav-link text-info" asp-controller="Customer" asp-action="Index">Customers</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning" asp-controller="Product" asp-action="Index">Products</a>
+                                </li>
+
+                                <li class="nav-item">
                                     <a class="nav-link text-info" asp-controller="Billing" asp-action="Index">Billing</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-info" asp-controller="Customer" asp-action="Index">Customers</a>
                                 </li>
                             }
 
@@ -63,9 +81,12 @@
 
                     </ul>
                 </div>
+
             </div>
         </nav>
     </header>
+
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -74,12 +95,12 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - BillingAndInvoiceSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - BillingAndInvoiceSystem
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

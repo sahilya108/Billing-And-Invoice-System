@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace BillingAndInvoiceSystem.Controllers
 {
@@ -8,10 +9,13 @@ namespace BillingAndInvoiceSystem.Controllers
         {
             var role = HttpContext.Session.GetString("UserRole");
 
-            if (role != "Staff")
+            if (role != "Staff" && role != "Admin")
             {
                 return RedirectToAction("Login", "User");
             }
+
+            // Get selected customer from session
+            ViewBag.CustomerName = HttpContext.Session.GetString("CustomerName");
 
             return View();
         }

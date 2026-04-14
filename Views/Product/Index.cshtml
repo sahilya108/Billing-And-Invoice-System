@@ -1,8 +1,25 @@
 @model IEnumerable<BillingAndInvoiceSystem.Models.Product>
 
+@using System.Linq
+@using BillingAndInvoiceSystem.Models
+@using BillingAndInvoiceSystem.Helpers
+
+<!-- SUCCESS MESSAGE -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
 <h2>Product List</h2>
 
+<!-- TOP BUTTONS -->
 <a asp-action="Create" class="btn btn-primary">Add Product</a>
+
+<a asp-controller="Cart" asp-action="Index" class="btn btn-warning ms-2">
+    Go to Cart 
+</a>
 
 <table class="table table-bordered mt-3">
     <thead>
@@ -10,20 +27,42 @@
             <th>Name</th>
             <th>Price</th>
             <th>Stock</th>
-            <th>Actions</th> <!-- NEW -->
+            <th>Actions</th>
+            <th>Cart</th>
         </tr>
     </thead>
 
     <tbody>
         @foreach (var item in Model)
         {
+            var cart = Context.Session.GetObjectFromJson<List<CartItem>>("Cart");
+            var isInCart = cart != null && cart.Any(c => c.ProductId == item.Id);
+
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Price</td>
                 <td>@item.Stock</td>
+
+                <!-- Actions -->
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+
+                <!--  ADD TO CART / ADDED -->
+                <td>
+                    @if (isInCart)
+                    {
+                        <button class="btn btn-success btn-sm" disabled>
+                            Added
+                        </button>
+                    }
+                    else
+                    {
+                        <a asp-action="AddToCart" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                            Add to Cart
+                        </a>
+                    }
                 </td>
             </tr>
         }

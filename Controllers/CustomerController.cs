@@ -1,6 +1,7 @@
 using BillingAndInvoiceSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace BillingAndInvoiceSystem.Controllers
 {
@@ -13,20 +14,20 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
-        //  View Customers
+        // View Customers
         public IActionResult Index()
         {
             var customers = _context.Customers.ToList();
             return View(customers);
         }
 
-        //  Add Customer (GET)
+        // Add Customer (GET)
         public IActionResult Create()
         {
             return View();
         }
 
-        //  Add Customer (POST)
+        // Add Customer (POST)
         [HttpPost]
         public IActionResult Create(Customer customer)
         {
@@ -42,13 +43,27 @@ namespace BillingAndInvoiceSystem.Controllers
         }
 
         //  Search Customer
-        public IActionResult Search(string phone)
+        public IActionResult Search(string searchTerm)
         {
             var customers = _context.Customers
                 .Where(c => c.Phone.Contains(phone))
                 .ToList();
 
             return View("Index", customers);
+        }
+
+        // SELECT CUSTOMER 
+        public IActionResult Select(int id)
+        {
+            var customer = _context.Customers.Find(id);
+
+            if (customer != null)
+            {
+                HttpContext.Session.SetInt32("CustomerId", customer.Id);
+                HttpContext.Session.SetString("CustomerName", customer.Name);
+            }
+
+            return RedirectToAction("Index", "Billing");
         }
     }
 }
