@@ -35,8 +35,6 @@ namespace BillingAndInvoiceSystem.Controllers
                 _context.Customers.Add(customer);
                 _context.SaveChanges();
 
-                TempData["Success"] = "Customer added successfully";
-
                 return RedirectToAction("Index");
             }
 
@@ -46,23 +44,16 @@ namespace BillingAndInvoiceSystem.Controllers
         //  Search Customer
         public IActionResult Search(string searchTerm)
         {
-            var customers = _context.Customers.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTerm))
+                if (string.IsNullOrEmpty(searchTerm))
             {
-                customers = customers.Where(c =>
-                    c.Name.ToLower().Contains(searchTerm.ToLower()) ||
-                    c.Phone.Contains(searchTerm));
+                return RedirectToAction("Index");
             }
 
-            var result = customers.ToList();
+                var customers = _context.Customers
+                .Where(c => c.Name.Contains(searchTerm) || c.Phone.Contains(searchTerm))
+                .ToList();
 
-            if (!result.Any())
-            {
-                ViewBag.Message = "No customer found";
-            }
-
-            return View("Index", result);
+                return View("Index", customers);
         }
     }
 }
