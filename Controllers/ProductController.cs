@@ -174,5 +174,26 @@ namespace BillingAndInvoiceSystem.Controllers
 
             return RedirectToAction("Index");
         }
+
+        //  SEARCH PRODUCTS
+        public IActionResult Search(string searchTerm)
+        {
+            var products = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                products = products.Where(p =>
+                    p.Name.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var result = products.ToList();
+
+            if (!result.Any())
+            {
+                ViewBag.Message = "No product found";
+            }
+
+            return View("Index", result);
+        }
     }
 }

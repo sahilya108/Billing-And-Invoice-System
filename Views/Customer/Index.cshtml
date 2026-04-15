@@ -28,23 +28,30 @@
 
 @if (Model.Any())
 {
-<table class="table table-bordered mt-3">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Phone</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-bordered mt-3">
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>@item.Phone</td>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Action</th> 
             </tr>
-        }
-    </tbody>
-</table>
-}
+        </thead>
 
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Phone</td>
+
+                    <!-- SELECT BUTTON -->
+                    <td>
+                        <a asp-action="Select" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                            Select
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
