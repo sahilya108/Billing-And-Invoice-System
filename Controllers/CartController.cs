@@ -1,14 +1,21 @@
 ﻿using BillingAndInvoiceSystem.Helpers;
 using BillingAndInvoiceSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 
 namespace BillingAndInvoiceSystem.Controllers
 {
     public class CartController : Controller
     {
+        private readonly AppDbContext _context;
+
+        public CartController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         // View Cart
         public IActionResult Index()
         {
@@ -18,7 +25,7 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(cart);
         }
 
-        // Update Quantity
+        // 🔥 Update Quantity (WITH STOCK VALIDATION)
         public IActionResult UpdateQuantity(int productId, int quantity)
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart");
@@ -29,6 +36,24 @@ namespace BillingAndInvoiceSystem.Controllers
 
                 if (item != null)
                 {
+                    var product = _context.Products.Find(productId);
+
+                    if (product != null)
+                    {
+                        // ❗ Minimum quantity = 1
+                        if (quantity < 1)
+                        {
+                            quantity = 1;
+                        }
+
+                        // ❗ Maximum = stock
+                        if (quantity > product.Stock)
+                        {
+                            quantity = product.Stock;
+                            TempData["Error"] = $"Only {product.Stock} items available!";
+                        }
+                    }
+
                     item.Quantity = quantity;
                 }
 
@@ -58,14 +83,15 @@ namespace BillingAndInvoiceSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        // CLEAR CART
+        // Clear Cart
         public IActionResult ClearCart()
         {
             HttpContext.Session.Remove("Cart");
+            TempData["Success"] = "Cart cleared!";
             return RedirectToAction("Index");
         }
 
-        //  CHECKOUT (GO TO INVOICE)
+        // Checkout → Invoice
         public IActionResult Checkout()
         {
             var customerId = HttpContext.Session.GetInt32("CustomerId");

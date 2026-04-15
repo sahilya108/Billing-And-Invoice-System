@@ -76,5 +76,106 @@ namespace BillingAndInvoiceSystem.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
+        // VIEW STAFF LIST
+        public IActionResult StaffList()
+        {
+            var role = HttpContext.Session.GetString("UserRole");
+
+            if (role != "Admin")
+            {
+                return RedirectToAction("Login");
+            }
+
+            var staff = _context.Users.Where(u => u.Role == "Staff").ToList();
+
+            return View(staff);
+        }
+
+        // EDIT STAFF (GET)
+        public IActionResult EditStaff(int id)
+        {
+            var staff = _context.Users.Find(id);
+
+            if (staff == null)
+            {
+                return NotFound();
+            }
+
+            return View(staff);
+        }
+
+        // EDIT STAFF (POST)
+        [HttpPost]
+        public IActionResult EditStaff(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Users.Update(user);
+                _context.SaveChanges();
+
+                TempData["Success"] = "Staff updated successfully";
+
+                return RedirectToAction("StaffList");
+            }
+
+            return View(user);
+        }
+
+        // DELETE STAFF
+        public IActionResult DeleteStaff(int id)
+        {
+            var staff = _context.Users.Find(id);
+
+            if (staff == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(staff);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Staff deleted successfully";
+
+            return RedirectToAction("StaffList");
+        }
+
+        // CHANGE PASSWORD (GET)
+        public IActionResult ChangePassword(int id)
+        {
+            var user = _context.Users.Find(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // CHANGE PASSWORD (POST)
+        [HttpPost]
+        public IActionResult ChangePassword(int id, string newPassword)
+        {
+            var user = _context.Users.Find(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                TempData["Error"] = "Password cannot be empty";
+                return RedirectToAction("ChangePassword", new { id });
+            }
+
+            user.Password = newPassword; // later we can hash
+            _context.SaveChanges();
+
+            TempData["Success"] = "Password updated successfully";
+
+            return RedirectToAction("StaffList");
+        }
     }
 }

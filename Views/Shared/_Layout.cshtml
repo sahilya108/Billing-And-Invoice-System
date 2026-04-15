@@ -37,14 +37,16 @@
                         @if (!string.IsNullOrEmpty(role))
                         {
                             <!-- ADMIN -->
-                            if (role == "Admin")
+                            @if (role == "Admin")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">Admin Panel</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-warning" asp-controller="Product" asp-action="Index">Products</a>
+                                    <a class="nav-link text-primary" asp-controller="Product" asp-action="Index">
+                                        Manage Products
+                                    </a>
                                 </li>
 
                                 <li class="nav-item">
@@ -52,9 +54,18 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-success" asp-controller="Cart" asp-action="Index">Cart</a>
+                                    <a class="nav-link text-info" asp-controller="User" asp-action="StaffList">
+                                        Manage Staff
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-success" asp-controller="Billing" asp-action="StartBilling">
+                                        Create Billing
+                                    </a>
                                 </li>
                             }
+
 
                             <!-- STAFF -->
                             if (role == "Staff")

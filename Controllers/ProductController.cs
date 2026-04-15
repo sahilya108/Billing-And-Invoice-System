@@ -16,21 +16,21 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
-        //  Admin Role Check Method
+        // Admin Role Check
         private bool IsAdmin()
         {
             var role = HttpContext.Session.GetString("UserRole");
             return role == "Admin";
         }
 
-        //  Common Role Check Method
+        // Admin or Staff Check
         private bool IsAdminOrStaff()
         {
             var role = HttpContext.Session.GetString("UserRole");
             return role == "Admin" || role == "Staff";
         }
 
-        //  Product List
+        // Product List
         public IActionResult Index()
         {
             if (!IsAdminOrStaff())
@@ -42,7 +42,7 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(products);
         }
 
-        //  Create (GET)
+        // Create (GET)
         public IActionResult Create()
         {
             if (!IsAdmin())
@@ -53,7 +53,7 @@ namespace BillingAndInvoiceSystem.Controllers
             return View();
         }
 
-        //  Create (POST)
+        // Create (POST)
         [HttpPost]
         public IActionResult Create(Product product)
         {
@@ -67,13 +67,14 @@ namespace BillingAndInvoiceSystem.Controllers
                 _context.Products.Add(product);
                 _context.SaveChanges();
 
+                TempData["Success"] = "Product added successfully!";
                 return RedirectToAction("Index");
             }
 
             return View(product);
         }
 
-        //  Edit (GET)
+        // Edit (GET)
         public IActionResult Edit(int id)
         {
             if (!IsAdmin())
@@ -91,7 +92,7 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(product);
         }
 
-        //  Edit (POST)
+        // Edit (POST)
         [HttpPost]
         public IActionResult Edit(Product product)
         {
@@ -105,13 +106,14 @@ namespace BillingAndInvoiceSystem.Controllers
                 _context.Products.Update(product);
                 _context.SaveChanges();
 
+                TempData["Success"] = "Product updated successfully!";
                 return RedirectToAction("Index");
             }
 
             return View(product);
         }
 
-        //  Delete
+        // Delete
         public IActionResult Delete(int id)
         {
             if (!IsAdmin())
@@ -129,15 +131,16 @@ namespace BillingAndInvoiceSystem.Controllers
             _context.Products.Remove(product);
             _context.SaveChanges();
 
+            TempData["Success"] = "Product deleted successfully!";
             return RedirectToAction("Index");
         }
 
-        // Add to cart
+        // ?? ADD TO CART (WITH STOCK VALIDATION)
         public IActionResult AddToCart(int id)
         {
             var role = HttpContext.Session.GetString("UserRole");
 
-            if (role != "Admin" && role != "Staff")
+            if (role != "Staff") // ? Only staff should add to cart
             {
                 return RedirectToAction("Login", "User");
             }
@@ -149,27 +152,44 @@ namespace BillingAndInvoiceSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Get cart from session
-            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart")
+                       ?? new List<CartItem>();
 
-            // Check if product already in cart
             var existingItem = cart.FirstOrDefault(c => c.ProductId == id);
 
             if (existingItem != null)
             {
-                existingItem.Quantity++;
+                //  CHECK STOCK LIMIT
+                if (existingItem.Quantity < product.Stock)
+                {
+                    existingItem.Quantity++;
+                    TempData["Success"] = "Product quantity updated!";
+                }
+                else
+                {
+                    TempData["Error"] = $"Only {product.Stock} items available!";
+                }
             }
             else
             {
-                cart.Add(new CartItem
+                if (product.Stock > 0)
                 {
-                    ProductId = product.Id,
-                    ProductName = product.Name,
-                    Price = product.Price,
-                    Quantity = 1
-                });
+                    cart.Add(new CartItem
+                    {
+                        ProductId = product.Id,
+                        ProductName = product.Name,
+                        Price = product.Price,
+                        Quantity = 1
+                    });
+
+                    TempData["Success"] = "Product added to cart!";
+                }
+                else
+                {
+                    TempData["Error"] = "Product out of stock!";
+                }
             }
-            // Save back to session
+
             HttpContext.Session.SetObjectAsJson("Cart", cart);
 
             return RedirectToAction("Index");
@@ -190,7 +210,7 @@ namespace BillingAndInvoiceSystem.Controllers
 
             if (!result.Any())
             {
-                ViewBag.Message = "No product found";
+                ViewBag.Message = "No product found ?";
             }
 
             return View("Index", result);

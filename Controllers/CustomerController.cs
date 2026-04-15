@@ -44,7 +44,55 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(customer);
         }
 
-        //  Search Customer
+        // EDIT CUSTOMER (GET)
+        public IActionResult Edit(int id)
+        {
+            var customer = _context.Customers.Find(id);
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return View(customer);
+        }
+
+        // EDIT CUSTOMER (POST)
+        [HttpPost]
+        public IActionResult Edit(Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Customers.Update(customer);
+                _context.SaveChanges();
+
+                TempData["Success"] = "Customer updated successfully";
+
+                return RedirectToAction("Index");
+            }
+
+            return View(customer);
+        }
+
+        // DELETE CUSTOMER
+        public IActionResult Delete(int id)
+        {
+            var customer = _context.Customers.Find(id);
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            _context.Customers.Remove(customer);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Customer deleted successfully";
+
+            return RedirectToAction("Index");
+        }
+
+        // SEARCH CUSTOMER
         public IActionResult Search(string searchTerm)
         {
             var customers = _context.Customers.AsQueryable();
@@ -66,7 +114,7 @@ namespace BillingAndInvoiceSystem.Controllers
             return View("Index", result);
         }
 
-        // SELECT CUSTOMER 
+        // SELECT CUSTOMER (STAFF)
         public IActionResult Select(int id)
         {
             var customer = _context.Customers.Find(id);
