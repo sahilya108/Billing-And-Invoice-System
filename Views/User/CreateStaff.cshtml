@@ -1,0 +1,32 @@
+﻿@model BillingAndInvoiceSystem.Models.User
+
+<h2>Add Staff</h2>
+
+<form asp-action="CreateStaff" method="post">
+
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" required />
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label>Password</label>
+        <input asp-for="Password" class="form-control" required />
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success">Create</button>
+
+    <a asp-action="StaffList" class="btn btn-secondary">Cancel</a>
+
+</form>

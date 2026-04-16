@@ -13,28 +13,30 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
-        // GET: Register Page
-        public IActionResult Register()
-        {
-            return View();
-        }
+        //// GET: Register Page
+        //public IActionResult Register()
+        //{
+        //    return View();
+        //}
 
-        // POST: Save User
-        [HttpPost]
-        public IActionResult Register(User user)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Users.Add(user);
-                _context.SaveChanges();
+        //// POST: Save User
+        //[HttpPost]
+        //public IActionResult Register(User user)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Users.Add(user);
+        //        _context.SaveChanges();
 
-                return RedirectToAction("Login");
-            }
+        //        return RedirectToAction("Login");
+        //    }
 
-            return View(user);
-        }
+        //    return View(user);
+        //}
 
         // Login Page (temporary)
+
+
         public IActionResult Login()
         {
             return View();
@@ -109,17 +111,22 @@ namespace BillingAndInvoiceSystem.Controllers
         [HttpPost]
         public IActionResult EditStaff(User user)
         {
-            if (ModelState.IsValid)
+            var existingUser = _context.Users.Find(user.Id);
+
+            if (existingUser == null)
             {
-                _context.Users.Update(user);
-                _context.SaveChanges();
-
-                TempData["Success"] = "Staff updated successfully";
-
-                return RedirectToAction("StaffList");
+                return NotFound();
             }
 
-            return View(user);
+            // update only fields
+            existingUser.Name = user.Name;
+            existingUser.Password = user.Password;
+
+            _context.SaveChanges();
+
+            TempData["Success"] = "Staff updated successfully";
+
+            return RedirectToAction("StaffList");
         }
 
         // DELETE STAFF
@@ -174,6 +181,40 @@ namespace BillingAndInvoiceSystem.Controllers
             _context.SaveChanges();
 
             TempData["Success"] = "Password updated successfully";
+
+            return RedirectToAction("StaffList");
+        }
+
+        // CREATE STAFF (GET)
+        public IActionResult CreateStaff()
+        {
+            var role = HttpContext.Session.GetString("UserRole");
+
+            if (role != "Admin")
+            {
+                return RedirectToAction("Login");
+            }
+
+            return View();
+        }
+
+        // CREATE STAFF (POST)
+        [HttpPost]
+        public IActionResult CreateStaff(User user)
+        {
+            user.Role = "Staff";
+
+            ModelState.Remove("Role"); 
+
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Staff created successfully";
 
             return RedirectToAction("StaffList");
         }

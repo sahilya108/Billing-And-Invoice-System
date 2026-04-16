@@ -1,0 +1,27 @@
+﻿@model BillingAndInvoiceSystem.Models.User
+
+<h2>Edit Staff</h2>
+
+<form asp-action="EditStaff" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label>Password</label>
+        <input asp-for="Password" class="form-control" />
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success">Update</button>
+
+    <a asp-action="StaffList" class="btn btn-secondary">Cancel</a>
+
+</form>
