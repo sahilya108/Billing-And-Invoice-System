@@ -13,26 +13,26 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
-        //// GET: Register Page
-        //public IActionResult Register()
-        //{
-        //    return View();
-        //}
+        // GET: Register Page
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-        //// POST: Save User
-        //[HttpPost]
-        //public IActionResult Register(User user)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Users.Add(user);
-        //        _context.SaveChanges();
+        // POST: Save User
+        [HttpPost]
+        public IActionResult Register(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
 
-        //        return RedirectToAction("Login");
-        //    }
+                return RedirectToAction("Login");
+            }
 
-        //    return View(user);
-        //}
+            return View(user);
+        }
 
         // Login Page (temporary)
 

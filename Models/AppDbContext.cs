@@ -14,6 +14,22 @@ namespace BillingAndInvoiceSystem.Models
 
         public DbSet<Customer> Customers { get; set; }
 
+        public DbSet<Invoice> Invoices { get; set; }
 
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.TotalAmount)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(i => i.Price)
+                .HasColumnType("decimal(18,2)");
+        }
     }
+
 }
