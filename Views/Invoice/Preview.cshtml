@@ -1,0 +1,85 @@
+﻿@model BillingAndInvoiceSystem.Models.Invoice
+
+<div class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <div class="d-flex justify-content-between">
+            <h2>Invoice Preview</h2>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Invoice No:</strong> @Model.InvoiceNumber</p>
+                <p><strong>Date:</strong> @Model.Date</p>
+            </div>
+
+            <div class="col-md-6 text-end">
+                <p><strong>Customer:</strong> @Model.CustomerName</p>
+                <p><strong>Biller:</strong> @Model.BillerName</p>
+            </div>
+        </div>
+
+        <hr />
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Price</td>
+                        <td>@item.Quantity</td>
+                        <td>@(item.Price* item.Quantity)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-end mt-3">
+            <p><strong>Total:</strong> @Model.TotalAmount</p>
+
+            @if (Model.DiscountAmount > 0)
+            {
+                <p><strong>Discount:</strong> -@Model.DiscountAmount</p>
+            }
+
+            @if (Model.DiscountPercent > 0)
+            {
+                <p><strong>Discount (%):</strong> @Model.DiscountPercent %</p>
+            }
+
+            <h4><strong>Final Amount: @Model.FinalAmount</strong></h4>
+        </div>
+
+        <hr />
+
+        <!--  CONFIRM BUTTON -->
+        <form asp-action="Confirm" method="post">
+            <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
+            <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
+            <input type="hidden" name="BillerName" value="@Model.BillerName" />
+            <input type="hidden" name="InvoiceNumber" value="@Model.InvoiceNumber" />
+            <input type="hidden" name="TotalAmount" value="@Model.TotalAmount" />
+            <input type="hidden" name="DiscountAmount" value="@Model.DiscountAmount" />
+            <input type="hidden" name="DiscountPercent" value="@Model.DiscountPercent" />
+            <input type="hidden" name="FinalAmount" value="@Model.FinalAmount" />
+
+            <button type="submit" class="btn btn-success">
+                Confirm & Print
+            </button>
+        </form>
+
+    </div>
+</div>

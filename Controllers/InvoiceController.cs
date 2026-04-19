@@ -16,7 +16,7 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
-        // 🔥 ADD PARAMETERS HERE
+        // ADD PARAMETERS HERE
         public IActionResult Generate(decimal? discountAmount, decimal? discountPercent)
         {
             var customerId = HttpContext.Session.GetInt32("CustomerId");
@@ -85,12 +85,7 @@ namespace BillingAndInvoiceSystem.Controllers
                 }
             }
 
-            _context.Invoices.Add(invoice);
-            _context.SaveChanges();
-
-            HttpContext.Session.Remove("Cart");
-
-            return RedirectToAction("Details", new { id = invoice.Id });
+            return View("Preview", invoice);
         }
 
         public IActionResult Details(int id)
@@ -115,6 +110,49 @@ namespace BillingAndInvoiceSystem.Controllers
                 .FirstOrDefault();
 
             return View(invoice);
+        }
+
+        [HttpPost]
+        public IActionResult Confirm(Invoice invoice)
+        {
+            //  attach items from session cart
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart");
+
+            if (cart == null || !cart.Any())
+            {
+                return RedirectToAction("Index", "Cart");
+            }
+
+            invoice.Date = DateTime.Now;
+            invoice.Items = new List<InvoiceItem>();
+
+            foreach (var item in cart)
+            {
+                invoice.Items.Add(new InvoiceItem
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName,
+                    Price = item.Price,
+                    Quantity = item.Quantity
+                });
+
+                // reduce stock
+                var product = _context.Products.Find(item.ProductId);
+                if (product != null)
+                {
+                    product.Stock -= item.Quantity;
+                }
+            }
+
+            // SAVE HERE (NOW CORRECT PLACE)
+            _context.Invoices.Add(invoice);
+            _context.SaveChanges();
+
+            // clear cart
+            HttpContext.Session.Remove("Cart");
+
+            // go to final printable page
+            return RedirectToAction("Details", new { id = invoice.Id });
         }
     }
 }
