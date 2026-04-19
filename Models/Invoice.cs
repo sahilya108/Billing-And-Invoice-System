@@ -23,5 +23,6 @@ namespace BillingAndInvoiceSystem.Models
         public decimal DiscountAmount { get; set; }
         public decimal DiscountPercent { get; set; }
         public decimal FinalAmount { get; set; }
+        public bool IsPdf { get; set; } = false;
     }
 }

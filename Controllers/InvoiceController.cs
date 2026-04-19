@@ -1,9 +1,12 @@
 ﻿using BillingAndInvoiceSystem.Helpers;
 using BillingAndInvoiceSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Rotativa.AspNetCore;
 
 namespace BillingAndInvoiceSystem.Controllers
 {
@@ -154,5 +157,43 @@ namespace BillingAndInvoiceSystem.Controllers
             // go to final printable page
             return RedirectToAction("Details", new { id = invoice.Id });
         }
+
+        // download Pdf
+
+
+
+        public IActionResult DownloadPdf(int id)
+        {
+            var invoice = _context.Invoices
+                .Where(i => i.Id == id)
+                .Select(i => new Invoice
+                {
+                    Id = i.Id,
+                    CustomerName = i.CustomerName,
+                    BillerName = i.BillerName,
+                    InvoiceNumber = i.InvoiceNumber,
+                    Date = i.Date,
+                    TotalAmount = i.TotalAmount,
+                    DiscountAmount = i.DiscountAmount,
+                    DiscountPercent = i.DiscountPercent,
+                    FinalAmount = i.FinalAmount,
+                    Items = _context.InvoiceItems
+                                .Where(x => x.InvoiceId == i.Id)
+                                .ToList(),
+
+                    IsPdf = true
+                })
+                .FirstOrDefault();
+
+            return new ViewAsPdf("Details", invoice)
+            {
+                FileName = $"Invoice_{invoice.InvoiceNumber}.pdf",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
+            };
+        }
+
+
+
     }
 }

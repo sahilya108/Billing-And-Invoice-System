@@ -1,108 +1,177 @@
 @model BillingAndInvoiceSystem.Models.Invoice
 
-<div class="container mt-4">
-
-    <div class="card shadow p-4">
-
-        <div class="d-flex justify-content-between align-items-center">
-            <h2>Invoice</h2>
-
-            <button onclick="window.print()" class="btn btn-success">
-                Print Invoice
-            </button>
-        </div>
-
-        <hr />
-
-        <!-- COMPANY INFO -->
-        <div class="row">
-            <div class="col-md-6">
-                <h4>BillingAndInvoiceSystem</h4>
-                <p>Invoice No: @Model.InvoiceNumber</p>
-                <p>Date: @Model.Date</p>
-            </div>
-
-            <div class="col-md-6 text-end">
-                <p><strong>Customer:</strong> @Model.CustomerName</p>
-                <p><strong>Billed By:</strong> @Model.BillerName</p>
-            </div>
-        </div>
-
-        <hr />
-
-        <!-- PRODUCT TABLE -->
-        <table class="table table-bordered mt-3">
-            <thead class="table-dark">
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var item in Model.Items)
-                {
-                    <tr>
-                        <td>@item.ProductName</td>
-                        <td>@item.Price</td>
-                        <td>@item.Quantity</td>
-                        <td>@(item.Price* item.Quantity)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <!-- BILL SUMMARY -->
-        <div class="row justify-content-end mt-4">
-            <div class="col-md-4">
-
-                <p><strong>Total Amount:</strong> @Model.TotalAmount</p>
-
-                @if (Model.DiscountAmount > 0)
-                {
-                    <p><strong>Discount:</strong> -@Model.DiscountAmount</p>
-                }
-
-                @if (Model.DiscountPercent > 0)
-                {
-                    <p><strong>Discount (%):</strong> @Model.DiscountPercent %</p>
-                }
-
-                <hr />
-
-                <h4><strong>Final Amount: @Model.FinalAmount</strong></h4>
-            </div>
-        </div>
-
-        <hr />
-
-        <!-- FOOTER -->
-        <div class="text-center mt-3">
-            <p>Thank you for your business</p>
-        </div>
-
-    </div>
-</div>
-
-<!-- PRINT STYLE -->
 <style>
-    @@media print {
-        button
-
-    {
-        display: none;
-    }
-
     body {
-        margin: 0;
+        font-family: Arial;
+        font-size: 14px;
     }
 
-    .card {
-        box-shadow: none;
-        border: none;
+    .invoice-box {
+        width: 100%;
+        max-width: 850px;
+        margin: auto;
+        padding: 25px;
     }
 
+    .company {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .company-details {
+        font-size: 13px;
+        margin-top: 5px;
+        line-height: 1.5;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 25px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    th {
+        background-color: #222;
+        color: white;
+        padding: 10px;
+        text-align: left;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    .summary {
+        width: 300px;
+        float: right;
+        margin-top: 20px;
+        text-align: right;
+    }
+
+        .summary p {
+            margin: 6px 0;
+        }
+
+    .final {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .footer {
+        margin-top: 60px;
+        text-align: center;
+        border-top: 1px solid #000;
+        padding-top: 10px;
+        font-size: 13px;
+    }
+
+    .no-print {
+        margin-top: 15px;
+    }
+
+    @@media print {
+        .no-print {
+            display: none !important;
+        }
     }
 </style>
+
+<div class="invoice-box">
+
+    <!--  HEADER FIXED  -->
+    <table style="width:100%; border-bottom:2px solid black; margin-bottom:20px;">
+        <tr>
+            <!-- LEFT -->
+            <td style="width:60%; vertical-align:top; border:none;">
+                <div class="company">BillingAndInvoiceSystem</div>
+
+                <div class="company-details">
+                    123, Main Road<br />
+                    Pune, Maharashtra - 411001<br />
+                    Phone: +91 8080409855<br />
+                    Email: billing@system.com
+                </div>
+            </td>
+
+            <!-- RIGHT -->
+            <td style="width:40%; text-align:right; vertical-align:top; border:none;">
+                <h2 style="margin:0;">INVOICE</h2>
+                <p style="margin:2px 0;"><strong>No:</strong> @Model.InvoiceNumber</p>
+                <p style="margin:2px 0;"><strong>Date:</strong> @Model.Date.ToString("dd-MM-yyyy HH:mm")</p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- CUSTOMER -->
+    <div style="margin-top:15px;">
+        <p><strong>Bill To:</strong> @Model.CustomerName</p>
+        <p><strong>Billed By:</strong> @Model.BillerName</p>
+    </div>
+
+    <!-- BUTTONS -->
+    @if (!Model.IsPdf)
+    {
+        <div class="no-print">
+            <button onclick="window.print()">Print</button>
+            <a asp-action="DownloadPdf" asp-route-id="@Model.Id">Download PDF</a>
+        </div>
+    }
+
+    <hr />
+
+    <!-- TABLE -->
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Price* item.Quantity)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- SUMMARY -->
+    <div class="summary">
+        <p><strong>Total Amount:</strong> @Model.TotalAmount</p>
+
+        @if (Model.DiscountAmount > 0)
+        {
+            <p><strong>Discount:</strong> -@Model.DiscountAmount</p>
+        }
+
+        @if (Model.DiscountPercent > 0)
+        {
+            <p><strong>Discount (%):</strong> @Model.DiscountPercent %</p>
+        }
+
+        <hr />
+
+        <p class="final">Final Amount: @Model.FinalAmount</p>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>Thank you for your business!</p>
+        <p>For support: support@billinginvoice.com | +91 8080409855</p>
+    </div>
+
+</div>

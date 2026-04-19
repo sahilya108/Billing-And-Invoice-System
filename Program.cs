@@ -14,6 +14,8 @@ builder.Services.AddSession();
 
 var app = builder.Build();
 
+Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

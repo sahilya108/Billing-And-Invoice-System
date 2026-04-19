@@ -78,6 +78,9 @@ namespace BillingAndInvoiceSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPdf")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 

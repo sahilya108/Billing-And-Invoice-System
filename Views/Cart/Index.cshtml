@@ -79,7 +79,9 @@ else
     </h4>
 
     <!-- DISCOUNT SECTION -->
-    <form asp-controller="Invoice" asp-action="Generate" method="get" class="mt-4">
+    <form asp-controller="Invoice" asp-action="Generate" method="post" class="mt-4">
+
+        @Html.AntiForgeryToken()
 
         <div class="row">
             <div class="col-md-3">
