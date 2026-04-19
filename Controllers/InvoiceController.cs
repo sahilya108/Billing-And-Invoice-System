@@ -20,6 +20,7 @@ namespace BillingAndInvoiceSystem.Controllers
         {
             var customerId = HttpContext.Session.GetInt32("CustomerId");
             var customerName = HttpContext.Session.GetString("CustomerName");
+            var billerName = HttpContext.Session.GetString("UserName") ?? "Admin";
 
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart");
 
@@ -33,6 +34,7 @@ namespace BillingAndInvoiceSystem.Controllers
             {
                 CustomerId = customerId.Value,
                 CustomerName = customerName,
+                BillerName = billerName,
                 Date = DateTime.Now,
                 TotalAmount = cart.Sum(x => x.TotalPrice),
                 Items = new List<InvoiceItem>()
@@ -73,6 +75,7 @@ namespace BillingAndInvoiceSystem.Controllers
                 {
                     Id = i.Id,
                     CustomerName = i.CustomerName,
+                    BillerName = i.BillerName,
                     Date = i.Date,
                     TotalAmount = i.TotalAmount,
                     Items = _context.InvoiceItems.Where(x => x.InvoiceId == i.Id).ToList()

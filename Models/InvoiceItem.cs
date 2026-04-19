@@ -1,4 +1,6 @@
-﻿namespace BillingAndInvoiceSystem.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BillingAndInvoiceSystem.Models
 {
     public class InvoiceItem
     {
@@ -10,6 +12,9 @@
         public decimal Price { get; set; }
         public int Quantity { get; set; }
 
+        public int InvoiceId { get; set; }
+
+        [NotMapped]
         public decimal Total => Price * Quantity;
     }
 }

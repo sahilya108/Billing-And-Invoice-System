@@ -13,13 +13,11 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
-        // GET: Register Page
         public IActionResult Register()
         {
             return View();
         }
 
-        // POST: Save User
         [HttpPost]
         public IActionResult Register(User user)
         {
@@ -34,15 +32,11 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(user);
         }
 
-        // Login Page (temporary)
-
-
         public IActionResult Login()
         {
             return View();
         }
 
-        // Login Authontication
         [HttpPost]
         public IActionResult Login(User user)
         {
@@ -66,20 +60,22 @@ namespace BillingAndInvoiceSystem.Controllers
                 return View(user);
             }
 
-            // Success (no need to check again)
+            // SUCCESS LOGIN
             HttpContext.Session.SetString("UserEmail", existingUser.Email);
-            HttpContext.Session.SetString("UserRole",existingUser.Role);
+            HttpContext.Session.SetString("UserRole", existingUser.Role);
+
+            // BILLER NAME
+            HttpContext.Session.SetString("UserName", existingUser.Name);
+
             return RedirectToAction("Index", "Home");
         }
 
-        // Logout 
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
 
-        // VIEW STAFF LIST
         public IActionResult StaffList()
         {
             var role = HttpContext.Session.GetString("UserRole");
@@ -94,7 +90,6 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(staff);
         }
 
-        // EDIT STAFF (GET)
         public IActionResult EditStaff(int id)
         {
             var staff = _context.Users.Find(id);
@@ -107,7 +102,6 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(staff);
         }
 
-        // EDIT STAFF (POST)
         [HttpPost]
         public IActionResult EditStaff(User user)
         {
@@ -118,7 +112,6 @@ namespace BillingAndInvoiceSystem.Controllers
                 return NotFound();
             }
 
-            // update only fields
             existingUser.Name = user.Name;
             existingUser.Password = user.Password;
 
@@ -129,7 +122,6 @@ namespace BillingAndInvoiceSystem.Controllers
             return RedirectToAction("StaffList");
         }
 
-        // DELETE STAFF
         public IActionResult DeleteStaff(int id)
         {
             var staff = _context.Users.Find(id);
@@ -147,7 +139,6 @@ namespace BillingAndInvoiceSystem.Controllers
             return RedirectToAction("StaffList");
         }
 
-        // CHANGE PASSWORD (GET)
         public IActionResult ChangePassword(int id)
         {
             var user = _context.Users.Find(id);
@@ -160,7 +151,6 @@ namespace BillingAndInvoiceSystem.Controllers
             return View(user);
         }
 
-        // CHANGE PASSWORD (POST)
         [HttpPost]
         public IActionResult ChangePassword(int id, string newPassword)
         {
@@ -177,7 +167,7 @@ namespace BillingAndInvoiceSystem.Controllers
                 return RedirectToAction("ChangePassword", new { id });
             }
 
-            user.Password = newPassword; // later we can hash
+            user.Password = newPassword;
             _context.SaveChanges();
 
             TempData["Success"] = "Password updated successfully";
@@ -185,7 +175,6 @@ namespace BillingAndInvoiceSystem.Controllers
             return RedirectToAction("StaffList");
         }
 
-        // CREATE STAFF (GET)
         public IActionResult CreateStaff()
         {
             var role = HttpContext.Session.GetString("UserRole");
@@ -198,13 +187,12 @@ namespace BillingAndInvoiceSystem.Controllers
             return View();
         }
 
-        // CREATE STAFF (POST)
         [HttpPost]
         public IActionResult CreateStaff(User user)
         {
             user.Role = "Staff";
 
-            ModelState.Remove("Role"); 
+            ModelState.Remove("Role");
 
             if (!ModelState.IsValid)
             {

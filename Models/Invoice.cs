@@ -15,5 +15,7 @@ namespace BillingAndInvoiceSystem.Models
         public decimal TotalAmount { get; set; }
 
         public List<InvoiceItem> Items { get; set; }
+
+        public string BillerName { get; set; }
     }
 }
