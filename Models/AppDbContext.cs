@@ -29,6 +29,18 @@ namespace BillingAndInvoiceSystem.Models
             modelBuilder.Entity<InvoiceItem>()
                 .Property(i => i.Price)
                 .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Invoice>()
+    .Property(i => i.DiscountAmount)
+    .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.DiscountPercent)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.FinalAmount)
+                .HasColumnType("decimal(18,2)");
         }
     }
 

@@ -10,6 +10,10 @@
     <h6>Billed By: @Model.BillerName</h6>
 </div>
 
+<div class="col-md-6 text-end">
+    <h5>Invoice No: @Model.InvoiceNumber</h5>
+</div>
+
 <table class="table table-bordered mt-3">
     <thead>
         <tr>
@@ -32,6 +36,9 @@
         }
     </tbody>
 </table>
+
+<p>Discount: @Model.DiscountAmount</p>
+<p>Final Amount: <strong>@Model.FinalAmount</strong></p>
 
 <h4 class="mt-3">
     Grand Total: @Model.TotalAmount

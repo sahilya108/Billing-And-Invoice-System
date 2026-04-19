@@ -1,4 +1,4 @@
-using BillingAndInvoiceSystem.Helpers;
+﻿using BillingAndInvoiceSystem.Helpers;
 using BillingAndInvoiceSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,11 +16,13 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
-        public IActionResult Generate()
+        // 🔥 ADD PARAMETERS HERE
+        public IActionResult Generate(decimal? discountAmount, decimal? discountPercent)
         {
             var customerId = HttpContext.Session.GetInt32("CustomerId");
             var customerName = HttpContext.Session.GetString("CustomerName");
             var billerName = HttpContext.Session.GetString("UserName") ?? "Admin";
+            var invoiceNumber = "INV-" + DateTime.Now.Ticks;
 
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart");
 
@@ -29,14 +31,40 @@ namespace BillingAndInvoiceSystem.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
+            // TOTAL CALCULATION
+            var total = cart.Sum(x => x.TotalPrice);
+
+            decimal finalAmount = total;
+            decimal appliedDiscountAmount = 0;
+            decimal appliedDiscountPercent = 0;
+
+            // DISCOUNT LOGIC
+            if (discountAmount.HasValue && discountAmount > 0)
+            {
+                appliedDiscountAmount = discountAmount.Value;
+                finalAmount = total - appliedDiscountAmount;
+            }
+            else if (discountPercent.HasValue && discountPercent > 0)
+            {
+                appliedDiscountPercent = discountPercent.Value;
+                appliedDiscountAmount = total * (appliedDiscountPercent / 100);
+                finalAmount = total - appliedDiscountAmount;
+            }
+
             // Create Invoice
             var invoice = new Invoice
             {
                 CustomerId = customerId.Value,
                 CustomerName = customerName,
                 BillerName = billerName,
+                InvoiceNumber = invoiceNumber,
                 Date = DateTime.Now,
-                TotalAmount = cart.Sum(x => x.TotalPrice),
+
+                TotalAmount = total,
+                DiscountAmount = appliedDiscountAmount,
+                DiscountPercent = appliedDiscountPercent,
+                FinalAmount = finalAmount,
+
                 Items = new List<InvoiceItem>()
             };
 
@@ -50,7 +78,6 @@ namespace BillingAndInvoiceSystem.Controllers
                     Quantity = item.Quantity
                 });
 
-                //  Reduce stock
                 var product = _context.Products.Find(item.ProductId);
                 if (product != null)
                 {
@@ -61,7 +88,6 @@ namespace BillingAndInvoiceSystem.Controllers
             _context.Invoices.Add(invoice);
             _context.SaveChanges();
 
-            // Clear cart after billing
             HttpContext.Session.Remove("Cart");
 
             return RedirectToAction("Details", new { id = invoice.Id });
@@ -76,9 +102,15 @@ namespace BillingAndInvoiceSystem.Controllers
                     Id = i.Id,
                     CustomerName = i.CustomerName,
                     BillerName = i.BillerName,
+                    InvoiceNumber = i.InvoiceNumber,
                     Date = i.Date,
                     TotalAmount = i.TotalAmount,
-                    Items = _context.InvoiceItems.Where(x => x.InvoiceId == i.Id).ToList()
+                    DiscountAmount = i.DiscountAmount,
+                    DiscountPercent = i.DiscountPercent,
+                    FinalAmount = i.FinalAmount,
+                    Items = _context.InvoiceItems
+                                .Where(x => x.InvoiceId == i.Id)
+                                .ToList()
                 })
                 .FirstOrDefault();
 

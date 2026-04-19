@@ -17,5 +17,11 @@ namespace BillingAndInvoiceSystem.Models
         public List<InvoiceItem> Items { get; set; }
 
         public string BillerName { get; set; }
+
+        public string InvoiceNumber { get; set; }
+
+        public decimal DiscountAmount { get; set; }
+        public decimal DiscountPercent { get; set; }
+        public decimal FinalAmount { get; set; }
     }
 }
