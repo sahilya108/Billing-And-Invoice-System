@@ -1,23 +1,29 @@
 ﻿<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BillingAndInvoiceSystem</title>
 
+   
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    
+
 </head>
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow mb-3">
             <div class="container-fluid">
 
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <!-- BRAND -->
+                <a class="navbar-brand text-light fw-bold" asp-controller="Home" asp-action="Index">
                     BillingAndInvoiceSystem
                 </a>
 
+                <!-- TOGGLE -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -31,7 +37,7 @@
 
                         <!-- COMMON -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
                         @if (!string.IsNullOrEmpty(role))
@@ -44,9 +50,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-primary" asp-controller="Product" asp-action="Index">
-                                        Manage Products
-                                    </a>
+                                    <a class="nav-link text-info" asp-controller="Product" asp-action="Index">Manage Products</a>
                                 </li>
 
                                 <li class="nav-item">
@@ -54,22 +58,21 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-info" asp-controller="User" asp-action="StaffList">
-                                        Manage Staff
-                                    </a>
+                                    <a class="nav-link text-info" asp-controller="User" asp-action="StaffList">Manage Staff</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-success" asp-controller="Billing" asp-action="StartBilling">
-                                        Create Billing
-                                    </a>
+                                    <a class="nav-link text-success" asp-controller="Billing" asp-action="StartBilling">Create Billing</a>
                                 </li>
                             }
 
-
                             <!-- STAFF -->
-                            if (role == "Staff")
+                            @if (role == "Staff")
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning" asp-controller="Staff" asp-action="Index">Dashboard</a>
+                                </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link text-info" asp-controller="Customer" asp-action="Index">Customers</a>
                                 </li>
@@ -78,12 +81,10 @@
                                     <a class="nav-link text-primary" asp-controller="Billing" asp-action="Index">Billing</a>
                                 </li>
 
-
                                 <li class="nav-item">
                                     <a class="nav-link text-warning" asp-controller="Product" asp-action="Index">Products</a>
                                 </li>
 
-                                
                                 <li class="nav-item">
                                     <a class="nav-link text-success" asp-controller="Cart" asp-action="Index">Cart</a>
                                 </li>
@@ -114,14 +115,16 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - BillingAndInvoiceSystem
+    <!-- DARK FOOTER -->
+    <footer class="footer bg-dark text-light mt-5">
+        <div class="container text-center py-3">
+            © 2026 Billing & Invoice System | Designed by Team SRV
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    ```
 
 </body>
 </html>

@@ -1,8 +1,30 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<div class="text-center text-white p-5 rounded"
+     style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4 fw-bold">
+        Welcome to Billing & Invoice System
+    </h1>
+
+    <p class="lead mt-3">
+        Manage invoices, customers, and billing easily with a smart and simple system.
+    </p>
+
+    <div class="mt-4">
+        <a class="btn btn-light btn-lg me-2" asp-controller="Billing" asp-action="StartBilling">
+            Create Invoice
+        </a>
+
+        <a class="btn btn-outline-light btn-lg" asp-controller="Customer" asp-action="Index">
+            View Customers
+        </a>
+    </div>
+
 </div>
+
+
+
+
+

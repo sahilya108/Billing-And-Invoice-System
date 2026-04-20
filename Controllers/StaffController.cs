@@ -1,35 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using BillingAndInvoiceSystem.Models;
-using System;
+﻿using BillingAndInvoiceSystem.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace BillingAndInvoiceSystem.Controllers
 {
-    public class AdminController : Controller
+    public class StaffController : Controller
     {
         private readonly AppDbContext _context;
 
-        public AdminController(AppDbContext context)
+        public StaffController(AppDbContext context)
         {
             _context = context;
         }
 
-        public IActionResult Index(string search, string billerName, DateTime? fromDate, DateTime? toDate)
+        public IActionResult Index(string search, DateTime? fromDate, DateTime? toDate)
         {
-            //  Session check
             var role = HttpContext.Session.GetString("UserRole");
+            var userName = HttpContext.Session.GetString("UserName");
 
-            if (role != "Admin")
+            if (role != "Staff")
             {
                 return RedirectToAction("Login", "User");
             }
 
-            //  Get invoices
             var invoices = _context.Invoices
-                .OrderByDescending(i => i.Date)
+                .Where(i => i.BillerName == userName) //  ONLY STAFF DATA
                 .AsQueryable();
 
-            // Search (Customer / Invoice No)
+            // Search
             if (!string.IsNullOrEmpty(search))
             {
                 invoices = invoices.Where(i =>
@@ -37,13 +35,7 @@ namespace BillingAndInvoiceSystem.Controllers
                     i.InvoiceNumber.Contains(search));
             }
 
-            //  Filter by staff/admin
-            if (!string.IsNullOrEmpty(billerName))
-            {
-                invoices = invoices.Where(i => i.BillerName == billerName);
-            }
-
-            //  Date filter
+            // Date Filter
             if (fromDate.HasValue)
             {
                 invoices = invoices.Where(i => i.Date >= fromDate.Value);
@@ -54,14 +46,17 @@ namespace BillingAndInvoiceSystem.Controllers
                 invoices = invoices.Where(i => i.Date <= toDate.Value);
             }
 
-            //  Take latest 25
-            var result = invoices.Take(25).ToList();
-
-            //  Summary
+            // Summary
             ViewBag.TotalInvoices = invoices.Count();
-            ViewBag.TotalRevenue = invoices.Any() ? invoices.Sum(i => i.FinalAmount) : 0;
+            ViewBag.TotalRevenue = invoices.Sum(i => i.FinalAmount);
 
-            return View(result);
+            //  Latest 25
+            var list = invoices
+                .OrderByDescending(i => i.Date)
+                .Take(25)
+                .ToList();
+
+            return View(list);
         }
     }
 }

@@ -1,0 +1,72 @@
+﻿@model List<BillingAndInvoiceSystem.Models.Invoice>
+
+<h2>Staff Dashboard</h2>
+<hr />
+
+<!-- SUMMARY -->
+<div style="display:flex; gap:20px; margin-bottom:20px;">
+    <div style="border:1px solid #ccc; padding:15px; width:200px;">
+        <h4>Total Invoices</h4>
+        <h2>@ViewBag.TotalInvoices</h2>
+    </div>
+
+    <div style="border:1px solid #ccc; padding:15px; width:200px;">
+        <h4>Total Revenue</h4>
+        <h2>₹@ViewBag.TotalRevenue</h2>
+    </div>
+</div>
+
+<!-- FILTER -->
+<form method="get" style="display:flex; gap:10px; margin-bottom:20px;">
+
+    <input type="text" name="search" placeholder="Search Customer / Invoice No" />
+
+    <input type="date" name="fromDate" />
+    <input type="date" name="toDate" />
+
+    <button type="submit">Filter</button>
+
+</form>
+
+<!-- TABLE -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Invoice No</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.InvoiceNumber</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.Date.ToString("dd-MM-yyyy")</td>
+                    <td>₹@item.FinalAmount</td>
+
+                    <td>
+                        <a asp-controller="Invoice"
+                           asp-action="Details"
+                           asp-route-id="@item.Id"
+                           class="btn btn-sm btn-primary">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" style="text-align:center;">No data</td>
+            </tr>
+        }
+    </tbody>
+</table>
