@@ -23,9 +23,14 @@
     .form-control {
         width: 100%;
         padding: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         border-radius: 5px;
         border: none;
+    }
+
+    .text-danger {
+        font-size: 13px;
+        margin-bottom: 10px;
     }
 
     .btn-register {
@@ -45,16 +50,40 @@
 <div class="register-container">
     <h2>User Registration</h2>
 
+    ```
+    <!-- SUCCESS MESSAGE -->
+    @if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success">@ViewBag.Success</div>
+    }
+
+    <!-- ERROR SUMMARY -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <form asp-action="Register" method="post">
+
         <input asp-for="Name" placeholder="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+
         <input asp-for="Email" placeholder="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+
         <input asp-for="Password" type="password" placeholder="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
 
         <select asp-for="Role" class="form-control">
+            <option value="">-- Select Role --</option>
             <option value="Admin">Admin</option>
-            @* <option value="Staff">Staff</option> *@
+            <option value="Staff">Staff</option>
         </select>
+        <span asp-validation-for="Role" class="text-danger"></span>
 
         <button type="submit" class="btn-register">Register</button>
     </form>
+    ```
+
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

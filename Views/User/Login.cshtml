@@ -1,6 +1,14 @@
 ﻿
 @model BillingAndInvoiceSystem.Models.User
 
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success text-center">
+        @TempData["Success"]
+    </div>
+}
+
 <style>
     body {
         background: linear-gradient(135deg, #1a1a1a, #3a0ca3);
@@ -53,6 +61,7 @@
         }
 </style>
 
+
 <div class="login-container">
     <h2>Login</h2>
 
@@ -73,6 +82,11 @@
             Don't have an account?
             <a href="/User/Register">Register</a>
         </p>
+    </div>
+    <div class="text-center mt-3">
+        <a asp-controller="User" asp-action="ForgotPassword" class="text-warning fw-bold">
+            Forgot Password?
+        </a>
     </div>
 </div>
 

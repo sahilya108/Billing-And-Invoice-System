@@ -13,6 +13,7 @@ namespace BillingAndInvoiceSystem.Controllers
             _context = context;
         }
 
+
         public IActionResult Register()
         {
             return View();
@@ -25,6 +26,8 @@ namespace BillingAndInvoiceSystem.Controllers
             {
                 _context.Users.Add(user);
                 _context.SaveChanges();
+
+                TempData["Success"] = "User registered successfully";
 
                 return RedirectToAction("Login");
             }
@@ -206,5 +209,36 @@ namespace BillingAndInvoiceSystem.Controllers
 
             return RedirectToAction("StaffList");
         }
+
+        // Forget password
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(string email, string newPassword)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
+
+            if (user == null)
+                        {
+                            ViewBag.Error = "Email not found";
+                            return View();
+                        }
+
+                        // Update password
+                        user.Password = newPassword;
+                        _context.SaveChanges();
+
+                        ViewBag.Success = "Password updated successfully";
+
+                        return View();
+
+
+            }
+
     }
 }
