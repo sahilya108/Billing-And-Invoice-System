@@ -43,8 +43,14 @@
     <div class="col-md-3">
         <select name="billerName" class="form-control">
             <option value="">All Staff</option>
-            <option value="sahil" selected="@(Context.Request.Query["billerName"] == "sahil")">Sahil</option>
-            <option value="ruturaj" selected="@(Context.Request.Query["billerName"] == "ruturaj")">Ruturaj</option>
+
+            @foreach (var user in ViewBag.Users)
+            {
+                <option value="@user"
+                        selected="@(Context.Request.Query["billerName"] == user)">
+                    @user
+                </option>
+            }
         </select>
     </div>
 

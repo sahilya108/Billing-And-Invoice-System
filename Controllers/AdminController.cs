@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BillingAndInvoiceSystem.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Linq;
 
@@ -24,12 +25,12 @@ namespace BillingAndInvoiceSystem.Controllers
                 return RedirectToAction("Login", "User");
             }
 
-            //  Get invoices
+            // Get invoices
             var invoices = _context.Invoices
                 .OrderByDescending(i => i.Date)
                 .AsQueryable();
 
-            // Search (Customer / Invoice No)
+            //  Search (Customer / Invoice No)
             if (!string.IsNullOrEmpty(search))
             {
                 invoices = invoices.Where(i =>
@@ -37,7 +38,7 @@ namespace BillingAndInvoiceSystem.Controllers
                     i.InvoiceNumber.Contains(search));
             }
 
-            //  Filter by staff/admin
+            // Filter by staff/admin
             if (!string.IsNullOrEmpty(billerName))
             {
                 invoices = invoices.Where(i => i.BillerName == billerName);
@@ -54,12 +55,20 @@ namespace BillingAndInvoiceSystem.Controllers
                 invoices = invoices.Where(i => i.Date <= toDate.Value);
             }
 
-            //  Take latest 25
+            // Take latest 25
             var result = invoices.Take(25).ToList();
 
-            //  Summary
+            // Summary
             ViewBag.TotalInvoices = invoices.Count();
             ViewBag.TotalRevenue = invoices.Any() ? invoices.Sum(i => i.FinalAmount) : 0;
+
+            //  Dynamic dropdown users
+            var users = _context.Users
+                .Select(u => u.Name)
+                .Distinct()
+                .ToList();
+
+            ViewBag.Users = users;
 
             return View(result);
         }

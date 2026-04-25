@@ -16,11 +16,14 @@ var app = builder.Build();
 
 Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
 
+// RotativaConfiguration.Setup(env.WebRootPath, "Rotativa");
+// Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.ContentRootPath, "Rotativa");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Home/Error");   // hide original and shows our error page for all
+    // app.UseDeveloperExceptionPage();   // showing exact original error
     app.UseHsts();
 }
 
