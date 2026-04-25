@@ -6,7 +6,7 @@ This system allows Admins and Staff to manage customers, products, and generate 
 
 ---
 
-## 🚀 Live Demo: Experience the application here → http://billingandinvoice.somee.com/User/Login
+## 🚀 Live Demo: ### http://billingandinvoice.somee.com/User/Login
 
 ---
 
@@ -103,42 +103,6 @@ This system allows Admins and Staff to manage customers, products, and generate 
 * Bootstrap 5
 * jQuery
 * Rotativa.AspNetCore (PDF generation)
-
----
-
-## 📂 Project Structure
-
-
-BillingAndInvoiceSystem/
-│
-├── Controllers/
-│   ├── AdminController.cs
-│   ├── StaffController.cs
-│   ├── UserController.cs
-│   ├── CustomerController.cs
-│   ├── ProductController.cs
-│   ├── InvoiceController.cs
-│
-├── Models/
-│   ├── User.cs
-│   ├── Customer.cs
-│   ├── Product.cs
-│   ├── Invoice.cs
-│   ├── InvoiceItem.cs
-│
-├── Views/
-│   ├── Admin/
-│   ├── Staff/
-│   ├── Invoice/
-│   ├── Customer/
-│   ├── Product/
-│   ├── User/
-│   ├── Shared/
-│
-├── wwwroot/
-├── appsettings.json
-└── Program.cs
-
 
 ---
 
